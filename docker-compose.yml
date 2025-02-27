@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: insurance_mlaas_mysql
+    environment:
+      MYSQL_DATABASE: insurance_mlaas
+      MYSQL_USER: mlaas_user
+      MYSQL_PASSWORD: SecurePass123
+      MYSQL_ROOT_PASSWORD: MyNewPass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - "C:/Users/alexh/OneDrive - UWE Bristol/Documents/MLAAS_DESD/insurance_mlaas.sql:/docker-entrypoint-initdb.d/insurance_mlaas.sql"
+
+  backend:
+    build: ./backend
+    container_name: desd_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/app
+
+  ml_model:
+    build: ./ml_model
+    container_name: ml_model
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+    volumes:
+      - ./ml_model:/app
+
+volumes:
+  mysql_data:
