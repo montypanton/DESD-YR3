@@ -15,6 +15,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE DATABASE IF NOT EXISTS insurance_mlaas;
+
+USE insurance_mlaas;
+
 --
 -- Table structure for table `billing_details`
 --
@@ -344,6 +348,30 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS accounts_customuser (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    password VARCHAR(128) NOT NULL,
+    last_login TIMESTAMP NULL,
+    is_superuser BOOLEAN NOT NULL DEFAULT FALSE,
+    username VARCHAR(150) NOT NULL UNIQUE,
+    first_name VARCHAR(150),
+    last_name VARCHAR(150),
+    email VARCHAR(254) NOT NULL UNIQUE,
+    is_staff BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    organization VARCHAR(100),
+    user_type VARCHAR(20) NOT NULL
+);
+
+INSERT INTO accounts_customuser (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined, organization, user_type) 
+VALUES 
+(1, 'hashed_password', NULL, 0, 'enduser1', 'End', 'User', 'enduser1@example.com', 0, 1, NOW(), 'ExampleOrg', 'END_USER'),
+(2, 'hashed_password', NULL, 0, 'aiengineer1', 'AI', 'Engineer', 'aiengineer1@example.com', 0, 1, NOW(), 'ExampleOrg', 'AI_ENGINEER'),
+(3, 'hashed_password', NULL, 1, 'admin1', 'Admin', 'User', 'admin1@example.com', 1, 1, NOW(), 'ExampleOrg', 'ADMIN'),
+(4, 'hashed_password', NULL, 0, 'finance1', 'Finance', 'User', 'finance1@example.com', 0, 1, NOW(), 'ExampleOrg', 'FINANCE');
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
